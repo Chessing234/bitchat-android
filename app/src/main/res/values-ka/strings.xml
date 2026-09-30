@@ -48,7 +48,7 @@
     <string name="notification_more_conversations">და კიდევ %1$d საუბარი</string>
     <string name="notification_active_peers_title">bitchatter-ები ახლოს!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">1 ადამიანი ახლოს</item>
+        <item quantity="one">%1$d ადამიანი ახლოს</item>
         <item quantity="other">ახლოს %1$d ადამიანი</item>
     </plurals>
     <string name="notification_new_messages">ახალი შეტყობინებები</string>

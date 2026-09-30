@@ -48,7 +48,7 @@
     <string name="notification_more_conversations">at %1$d pang usapan</string>
     <string name="notification_active_peers_title">mga bitchatter na malapit!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">1 tao sa paligid</item>
+        <item quantity="one">%1$d tao sa paligid</item>
         <item quantity="other">%1$d tao sa paligid</item>
     </plurals>
     <string name="notification_new_messages">Mga bagong mensahe</string>

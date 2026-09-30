@@ -94,7 +94,7 @@
   <string name="notification_more_conversations">还有 %1$d 个对话</string>
   <string name="notification_active_peers_title">👥 附近有 bitchat 用户！</string>
   <plurals name="notification_active_peers_body">
-      <item quantity="one">附近有 1 人</item>
+      <item quantity="one">附近有 %1$d 人</item>
       <item quantity="other">附近有 %1$d 人</item>
   </plurals>
   <string name="notification_new_messages">新消息</string>

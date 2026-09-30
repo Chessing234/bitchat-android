@@ -48,7 +48,7 @@
     <string name="notification_more_conversations">ary %1$d resaka hafa</string>
     <string name="notification_active_peers_title">bitchatter akaiky!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">Olona 1 manodidina</item>
+        <item quantity="one">Olona %1$d manodidina</item>
         <item quantity="other">Olona %1$d manodidina</item>
     </plurals>
     <string name="notification_new_messages">Hafatra vaovao</string>

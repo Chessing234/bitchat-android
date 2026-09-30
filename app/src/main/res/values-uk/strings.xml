@@ -81,7 +81,7 @@
     <string name="notification_more_conversations">і ще %1$d розмов</string>
     <string name="notification_active_peers_title">👥 bitchat-користувачі поруч!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">1 людина поруч</item>
+        <item quantity="one">%1$d людина поруч</item>
         <item quantity="other">%1$d людей поруч</item>
     </plurals>
     <string name="notification_new_messages">Нові повідомлення</string>

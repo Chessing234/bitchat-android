@@ -96,7 +96,7 @@
     <string name="notification_more_conversations">i jeszcze %1$d rozmów</string>
     <string name="notification_active_peers_title">👥 bitchatowicze w pobliżu!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">1 osoba w pobliżu</item>
+        <item quantity="one">%1$d osoba w pobliżu</item>
         <item quantity="other">%1$d osób w pobliżu</item>
     </plurals>
     <string name="notification_new_messages">Nowe wiadomości</string>

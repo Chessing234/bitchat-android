@@ -48,7 +48,7 @@
     <string name="notification_more_conversations">र %1$d अरू कुराकानी</string>
     <string name="notification_active_peers_title">नजिकै bitchatter हरू!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">१ जना नजिकै</item>
+        <item quantity="one">%1$d जना नजिकै</item>
         <item quantity="other">%1$d जना नजिकै</item>
     </plurals>
     <string name="notification_new_messages">नयाँ सन्देश</string>

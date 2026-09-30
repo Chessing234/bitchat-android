@@ -48,7 +48,7 @@
     <string name="notification_more_conversations">و %1$d گفت‌وگوی دیگر</string>
     <string name="notification_active_peers_title">کاربران bitchat در نزدیکی!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">۱ نفر در نزدیکی</item>
+        <item quantity="one">%1$d نفر در نزدیکی</item>
         <item quantity="other">%1$d نفر در نزدیکی</item>
     </plurals>
     <string name="notification_new_messages">پیام‌های جدید</string>

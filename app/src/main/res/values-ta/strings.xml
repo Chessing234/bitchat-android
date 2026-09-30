@@ -80,7 +80,7 @@
   <string name="notification_more_conversations">மற்றும் %1$d மேலும் உரையாடல்கள்</string>
   <string name="notification_active_peers_title">👥 அருகில் bitchatters!</string>
   <plurals name="notification_active_peers_body">
-      <item quantity="one">1 நபர் அருகில் உள்ளார்</item>
+      <item quantity="one">%1$d நபர் அருகில் உள்ளார்</item>
       <item quantity="other">%1$d நபர்கள் அருகில் உள்ளனர்</item>
   </plurals>
   <string name="notification_new_messages">புதிய செய்திகள்</string>

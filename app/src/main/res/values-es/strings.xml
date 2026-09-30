@@ -48,7 +48,7 @@
     <string name="notification_more_conversations">y %1$d conversaciones más</string>
     <string name="notification_active_peers_title">¡bitchatters cerca!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">1 persona cerca</item>
+        <item quantity="one">%1$d persona cerca</item>
         <item quantity="other">%1$d personas cerca</item>
     </plurals>
     <string name="notification_new_messages">Nuevos mensajes</string>

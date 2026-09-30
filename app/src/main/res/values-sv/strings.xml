@@ -42,7 +42,7 @@
     <string name="notification_more_conversations">och %1$d fler konversationer</string>
     <string name="notification_active_peers_title">bitchatter i närheten!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">1 person i närheten</item>
+        <item quantity="one">%1$d person i närheten</item>
         <item quantity="other">%1$d personer i närheten</item>
     </plurals>
     <string name="notification_new_messages">Nya meddelanden</string>

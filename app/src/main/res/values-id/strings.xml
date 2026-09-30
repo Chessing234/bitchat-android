@@ -48,7 +48,7 @@
     <string name="notification_more_conversations">dan %1$d percakapan lagi</string>
     <string name="notification_active_peers_title">bitchatter terdekat!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">1 orang terdekat</item>
+        <item quantity="one">%1$d orang terdekat</item>
         <item quantity="other">%1$d orang terdekat</item>
     </plurals>
     <string name="notification_new_messages">Pesan baru</string>

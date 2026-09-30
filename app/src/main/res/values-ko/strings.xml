@@ -48,7 +48,7 @@
     <string name="notification_more_conversations">그리고 %1$d개의 대화 더</string>
     <string name="notification_active_peers_title">근처 bitchatter!</string>
     <plurals name="notification_active_peers_body">
-        <item quantity="one">근처 1명</item>
+        <item quantity="one">근처 %1$d명</item>
         <item quantity="other">근처 %1$d명</item>
     </plurals>
     <string name="notification_new_messages">새 메시지</string>

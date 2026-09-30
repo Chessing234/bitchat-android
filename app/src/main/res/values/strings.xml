@@ -49,7 +49,7 @@
   <string name="notification_more_conversations">and %1$d more conversations</string>
   <string name="notification_active_peers_title">bitchatters nearby!</string>
   <plurals name="notification_active_peers_body">
-      <item quantity="one">1 person around</item>
+      <item quantity="one">%1$d person around</item>
       <item quantity="other">%1$d people around</item>
   </plurals>
   <string name="notification_new_messages">New Messages</string>
