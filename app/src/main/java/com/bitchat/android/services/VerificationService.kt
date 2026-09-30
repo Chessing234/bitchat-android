@@ -147,8 +147,8 @@ object VerificationService {
         val qr = VerificationQR.fromUrlString(urlString) ?: return null
         val now = System.currentTimeMillis() / 1000L
         // Freshness in both directions: a future-dated timestamp must not
-        // buy a QR a longer validity window than a fresh one gets. iOS uses
-        // the same abs() check in VerificationService.verifyScannedQR.
+        // buy a QR a longer validity window than a fresh one gets. Extreme
+        // timestamps saturate the skew instead of wrapping into an accepted age.
         if (verificationTimestampSkewSeconds(now, qr.ts) > maxAgeSeconds) return null
 
         val sig = qr.sigHex.dataFromHexString() ?: return null
@@ -296,7 +296,14 @@ object VerificationService {
     }
 }
 
-/** Absolute age of a verification QR timestamp, in seconds. */
+/** Absolute age in seconds, saturating when the difference cannot fit in a Long. */
 internal fun verificationTimestampSkewSeconds(nowSeconds: Long, qrTimestampSeconds: Long): Long {
-    return kotlin.math.abs(nowSeconds - qrTimestampSeconds)
+    val difference = if (nowSeconds >= qrTimestampSeconds) {
+        nowSeconds - qrTimestampSeconds
+    } else {
+        qrTimestampSeconds - nowSeconds
+    }
+    // The ordered subtraction is nonnegative mathematically. A negative result
+    // means signed overflow (including Long.MIN_VALUE, whose abs is negative).
+    return if (difference < 0) Long.MAX_VALUE else difference
 }

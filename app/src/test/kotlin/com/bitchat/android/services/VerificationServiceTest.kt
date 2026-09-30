@@ -31,6 +31,35 @@ class VerificationServiceTest {
     }
 
     @Test
+    fun `fixed QR timestamp vectors preserve the five minute window`() {
+        val now = 1_700_000_000L
+        for ((timestamp, expectedSkew) in listOf(
+            1_699_999_700L to 300L,
+            1_700_000_300L to 300L,
+            1_699_999_699L to 301L,
+            1_700_000_301L to 301L
+        )) {
+            assertEquals(expectedSkew, verificationTimestampSkewSeconds(now, timestamp))
+        }
+    }
+
+    @Test
+    fun `extreme timestamp differences saturate instead of becoming fresh`() {
+        assertEquals(Long.MAX_VALUE, verificationTimestampSkewSeconds(0, Long.MIN_VALUE))
+        assertEquals(Long.MAX_VALUE, verificationTimestampSkewSeconds(Long.MIN_VALUE, 0))
+        assertEquals(Long.MAX_VALUE, verificationTimestampSkewSeconds(Long.MAX_VALUE, Long.MIN_VALUE))
+        assertEquals(Long.MAX_VALUE, verificationTimestampSkewSeconds(Long.MIN_VALUE, Long.MAX_VALUE))
+        assertEquals(1L, verificationTimestampSkewSeconds(Long.MIN_VALUE, Long.MIN_VALUE + 1))
+        assertEquals(1L, verificationTimestampSkewSeconds(Long.MAX_VALUE, Long.MAX_VALUE - 1))
+    }
+
+    @Test
+    fun `verifyScannedQR rejects signed extreme timestamps`() {
+        assertNull(VerificationService.verifyScannedQR(signedQr(Long.MIN_VALUE), maxAgeSeconds = 60))
+        assertNull(VerificationService.verifyScannedQR(signedQr(Long.MAX_VALUE), maxAgeSeconds = 60))
+    }
+
+    @Test
     fun `verifyScannedQR accepts a freshly signed payload`() {
         val qr = VerificationService.buildMyQRString(nickname = "alice", npub = null)
         assertNotNull(qr)
