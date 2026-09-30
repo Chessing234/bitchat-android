@@ -491,9 +491,15 @@ class MessageHandler(private val myPeerID: String, private val appContext: andro
             val message = BitchatMessage.fromBinaryPayload(packet.payload)?.let { decoded ->
                 decoded.copy(
                     id = packetId,
-                    sender = decoded.sender.ifBlank { peerNickname },
+                    sender = peerNickname,
                     senderPeerID = peerID,
-                    timestamp = Date(packet.timestamp.toLong())
+                    timestamp = Date(packet.timestamp.toLong()),
+                    isPrivate = false,
+                    isRelay = false,
+                    originalSender = null,
+                    recipientNickname = null,
+                    isEncrypted = false,
+                    encryptedContent = null
                 )
             } ?: BitchatMessage(
                 id = packetId,

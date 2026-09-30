@@ -540,25 +540,20 @@ class MeshCore(
         content: String,
         mentions: List<String>,
         channel: String?
-    ): ByteArray {
+    ): ByteArray? {
         if (channel == null) return content.toByteArray(Charsets.UTF_8)
         val nickname = hooks.announcementNicknameProvider?.invoke() ?: myPeerID
-        val encoded = BitchatMessage(
-            sender = nickname,
-            content = content,
-            timestamp = java.util.Date(),
-            isRelay = false,
-            senderPeerID = myPeerID,
-            mentions = mentions.takeIf { it.isNotEmpty() },
-            channel = channel
-        ).toBinaryPayload()
-        return encoded ?: content.toByteArray(Charsets.UTF_8)
+        return encodePublicOrChannelMessage(content, mentions, channel, nickname, myPeerID)
     }
 
     fun sendMessage(content: String, mentions: List<String> = emptyList(), channel: String? = null) {
         if (content.isEmpty()) return
         scope.launch {
             val payloadBytes = encodePublicOrChannelPayload(content, mentions, channel)
+                ?: run {
+                    Log.w("MeshCore", "Channel message encoding failed; refusing public-text fallback")
+                    return@launch
+                }
             val packet = BitchatPacket(
                 version = 1u,
                 type = MessageType.MESSAGE.value,

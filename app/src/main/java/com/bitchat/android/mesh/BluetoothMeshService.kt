@@ -861,23 +861,14 @@ class BluetoothMeshService(private val context: Context) : TransportBridgeServic
         content: String,
         mentions: List<String>,
         channel: String?
-    ): ByteArray {
+    ): ByteArray? {
         if (channel == null) return content.toByteArray(Charsets.UTF_8)
         val nickname = try {
             com.bitchat.android.services.NicknameProvider.getNickname(context, myPeerID)
         } catch (_: Exception) {
             myPeerID
         }
-        val encoded = BitchatMessage(
-            sender = nickname,
-            content = content,
-            timestamp = java.util.Date(),
-            isRelay = false,
-            senderPeerID = myPeerID,
-            mentions = mentions.takeIf { it.isNotEmpty() },
-            channel = channel
-        ).toBinaryPayload()
-        return encoded ?: content.toByteArray(Charsets.UTF_8)
+        return encodePublicOrChannelMessage(content, mentions, channel, nickname, myPeerID)
     }
 
     /**
@@ -888,6 +879,10 @@ class BluetoothMeshService(private val context: Context) : TransportBridgeServic
         
         serviceScope.launch {
             val payloadBytes = encodePublicOrChannelPayload(content, mentions, channel)
+                ?: run {
+                    Log.w(TAG, "Channel message encoding failed; refusing public-text fallback")
+                    return@launch
+                }
             val packet = BitchatPacket(
                 version = 1u,
                 type = MessageType.MESSAGE.value,
