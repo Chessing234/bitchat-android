@@ -9,6 +9,10 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import android.os.Build
+import com.bitchat.android.protocol.BitchatPacket
+import com.bitchat.android.protocol.MessageType
+import com.bitchat.android.util.AppConstants
+import java.nio.ByteBuffer
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.P], manifest = Config.NONE)
@@ -47,5 +51,34 @@ class NostrEmbeddedPacketDecoderTest {
         val encoded = Base64.encodeToString(nineBytes, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
             .replace("=", "")
         assertNotNull(NostrEmbeddedPacketDecoder.decodeBounded(encoded, maxBytes = maxBytes))
+    }
+
+    @Test
+    fun `maximum payload retains room for wire framing`() {
+        val payload = ByteArray(AppConstants.Protocol.MAX_PAYLOAD_LENGTH) { it.toByte() }
+        val packet = BitchatPacket(
+            version = 2u, type = MessageType.NOISE_ENCRYPTED.value,
+            senderID = ByteArray(8) { 1 }, recipientID = ByteArray(8) { 2 },
+            timestamp = 1u, payload = payload, ttl = 7u,
+            route = List(255) { ByteArray(8) { 3 } }, signature = ByteArray(64) { 4 }
+        )
+        val wire = requireNotNull(packet.toBinaryData())
+        val encoded = Base64.encodeToString(wire, Base64.URL_SAFE or Base64.NO_WRAP)
+        val decoded = requireNotNull(NostrEmbeddedPacketDecoder.decodeBounded(encoded))
+        assertArrayEquals(wire, decoded)
+        assertArrayEquals(payload, requireNotNull(BitchatPacket.fromBinaryData(decoded)).payload)
+    }
+
+    @Test
+    fun `framing allowance does not raise the parser payload limit`() {
+        val size = AppConstants.Protocol.MAX_PAYLOAD_LENGTH + 1
+        // Independent uncompressed v2 frame, bypassing the encoder's own cap.
+        val wire = ByteBuffer.allocate(16 + 8 + size)
+            .put(2).put(MessageType.NOISE_ENCRYPTED.value.toByte()).put(7)
+            .putLong(1L).put(0).putInt(size).put(ByteArray(8) { 1 })
+            .put(ByteArray(size)).array()
+        val encoded = Base64.encodeToString(wire, Base64.URL_SAFE or Base64.NO_WRAP)
+        val decoded = requireNotNull(NostrEmbeddedPacketDecoder.decodeBounded(encoded))
+        assertNull(BitchatPacket.fromBinaryData(decoded))
     }
 }

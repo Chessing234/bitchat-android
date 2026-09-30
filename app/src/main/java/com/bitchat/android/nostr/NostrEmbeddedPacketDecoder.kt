@@ -2,7 +2,7 @@ package com.bitchat.android.nostr
 
 import android.util.Base64
 import android.util.Log
-import com.bitchat.android.util.AppConstants
+import com.bitchat.android.protocol.BinaryProtocol
 
 /**
  * Decode a `bitchat1:` base64url payload with an explicit size ceiling.
@@ -16,7 +16,7 @@ object NostrEmbeddedPacketDecoder {
 
     fun decodeBounded(
         base64Url: String,
-        maxBytes: Int = AppConstants.Protocol.MAX_PAYLOAD_LENGTH
+        maxBytes: Int = BinaryProtocol.MAX_WIRE_FRAME_LENGTH
     ): ByteArray? {
         if (maxBytes <= 0) return null
         // Base64 expands 3 bytes -> 4 chars; reject oversized encodings first.
