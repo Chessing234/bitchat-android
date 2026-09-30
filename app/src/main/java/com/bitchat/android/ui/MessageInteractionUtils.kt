@@ -11,10 +11,13 @@ import com.bitchat.android.model.BitchatMessage
 internal fun BitchatMessage.isFromSelf(
     currentUserNickname: String,
     myPeerId: String,
-): Boolean =
-    senderPeerID == myPeerId ||
-        sender == currentUserNickname ||
+): Boolean {
+    // Prefer peer id when present so renaming onto someone else's nick
+    // does not make their history render as ours (#464).
+    senderPeerID?.let { return it == myPeerId }
+    return sender == currentUserNickname ||
         sender.startsWith("$currentUserNickname#")
+}
 
 internal fun normalizeMessageUrl(rawUrl: String): String =
     if (

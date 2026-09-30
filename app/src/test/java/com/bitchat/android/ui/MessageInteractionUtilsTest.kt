@@ -22,6 +22,12 @@ class MessageInteractionUtilsTest {
     }
 
     @Test
+    fun `self detection prefers peer id over matching nickname`() {
+        assertFalse(message(sender = "me", senderPeerId = "peer-b").isFromSelf("me", "peer-a"))
+        assertTrue(message(sender = "alice", senderPeerId = "peer-a").isFromSelf("me", "peer-a"))
+    }
+
+    @Test
     fun `URL normalization preserves explicit HTTP schemes`() {
         assertEquals("http://example.com", normalizeMessageUrl("http://example.com"))
         assertEquals("HTTPS://example.com", normalizeMessageUrl("HTTPS://example.com"))
