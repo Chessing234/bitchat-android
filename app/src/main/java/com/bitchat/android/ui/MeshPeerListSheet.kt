@@ -1910,32 +1910,36 @@ fun PrivateChatSheet(
                         },
                         title = titleText
                     ) {
-                        ConversationHeaderAction(
-                            onClick = { viewModel.toggleFavorite(peerID) },
-                            contentDescription = if (isFavorite) {
-                                stringResource(R.string.cd_remove_favorite)
-                            } else {
-                                stringResource(R.string.cd_add_favorite)
+                        // Geohash/Nostr-only DMs have no Noise fingerprint, so
+                        // toggleFavorite is a no-op (#407). Hide the dead control.
+                        if (!isNostrPeer) {
+                            ConversationHeaderAction(
+                                onClick = { viewModel.toggleFavorite(peerID) },
+                                contentDescription = if (isFavorite) {
+                                    stringResource(R.string.cd_remove_favorite)
+                                } else {
+                                    stringResource(R.string.cd_add_favorite)
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(
+                                        if (isFavorite) {
+                                            R.drawable.ic_spec_star_filled
+                                        } else {
+                                            R.drawable.ic_spec_star
+                                        }
+                                    ),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(HeaderIconSize)
+                                        .graphicsLayer {
+                                            rotationZ = starWobbleRotation.value
+                                            scaleX = starWobbleScale.value
+                                            scaleY = starWobbleScale.value
+                                        },
+                                    tint = favoriteStarTint
+                                )
                             }
-                        ) {
-                            Icon(
-                                painter = painterResource(
-                                    if (isFavorite) {
-                                        R.drawable.ic_spec_star_filled
-                                    } else {
-                                        R.drawable.ic_spec_star
-                                    }
-                                ),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(HeaderIconSize)
-                                    .graphicsLayer {
-                                        rotationZ = starWobbleRotation.value
-                                        scaleX = starWobbleScale.value
-                                        scaleY = starWobbleScale.value
-                                    },
-                                tint = favoriteStarTint
-                            )
                         }
 
                         if (isVerified) {
