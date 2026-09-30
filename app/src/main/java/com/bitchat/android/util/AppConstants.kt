@@ -113,8 +113,10 @@ object AppConstants {
         // created_at is NIP-17-randomized into the past and may be older.
         const val DM_SUBSCRIBE_LOOKBACK_SECONDS: Long = 86_400L // 24h
         const val DM_MAX_CLOCK_SKEW_SECONDS: Long = 900L // 15min
-        // Outer gift-wrap age ceiling: 48h randomization + 15min skew.
-        const val DM_GIFT_WRAP_MAX_AGE_SECONDS: Long = 173_700L
+        // Outer age includes delivery delay as well as NIP-17 randomization.
+        const val DM_GIFT_WRAP_RANDOMIZATION_SECONDS: Long = 172_800L // 48h
+        const val DM_GIFT_WRAP_MAX_AGE_SECONDS: Long =
+            DM_GIFT_WRAP_RANDOMIZATION_SECONDS + DM_SUBSCRIBE_LOOKBACK_SECONDS + DM_MAX_CLOCK_SKEW_SECONDS
     }
 
     object Tor {

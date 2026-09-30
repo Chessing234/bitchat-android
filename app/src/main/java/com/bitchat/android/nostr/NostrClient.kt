@@ -143,7 +143,7 @@ class NostrClient private constructor(private val context: Context) {
         
         val filter = NostrFilter.giftWrapsFor(
             pubkey = identity.publicKeyHex,
-            since = System.currentTimeMillis() - 172800000L // Last 48 hours (align with NIP-17 randomization)
+            since = NostrTimestampPolicy.giftWrapSinceMillis()
         )
         
         relayManager.subscribe(filter, "private-messages", { giftWrap ->

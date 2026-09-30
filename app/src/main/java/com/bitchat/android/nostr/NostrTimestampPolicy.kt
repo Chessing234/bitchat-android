@@ -12,6 +12,10 @@ import com.bitchat.android.util.AppConstants
  */
 object NostrTimestampPolicy {
 
+    /** Millisecond cutoff consumed by NostrFilter.giftWrapsFor. */
+    fun giftWrapSinceMillis(nowMillis: Long = System.currentTimeMillis()): Long =
+        nowMillis - AppConstants.Nostr.DM_GIFT_WRAP_MAX_AGE_SECONDS * 1000L
+
     /**
      * Accept an inner rumor `created_at` inside
      * `[now − lookback − skew, now + skew]`.
@@ -28,7 +32,8 @@ object NostrTimestampPolicy {
 
     /**
      * Accept an outer gift-wrap `created_at` that is not in the far future and
-     * not older than the NIP-17 randomization ceiling plus skew.
+     * not older than the NIP-17 randomization ceiling plus delivery lookback
+     * and clock skew. A day-old rumor may have a three-day-old wrapper.
      */
     fun isAcceptableGiftWrapTimestamp(
         createdAtSeconds: Int,
