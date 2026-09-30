@@ -97,6 +97,9 @@ class MeshForegroundService : Service() {
     private var isInForeground: Boolean = false
     private var isShuttingDown: Boolean = false
     private var lastNotifiedPeerCount: Int? = null
+    private var lastNotificationAtMs: Long = 0L
+    // Samsung One UI SystemUI ANRs when FGS notifications re-post too often (#696).
+    private val MIN_NOTIFICATION_INTERVAL_MS = 5_000L
 
     override fun onCreate() {
         super.onCreate()
@@ -240,9 +243,13 @@ class MeshForegroundService : Service() {
         }
         val count = getUnifiedActivePeerCount()
         if (MeshServicePreferences.isBackgroundEnabled(true) && hasAllRequiredPermissions()) {
-            if (lastNotifiedPeerCount != count) {
+            val now = System.currentTimeMillis()
+            val countChanged = lastNotifiedPeerCount != count
+            val cooledDown = now - lastNotificationAtMs >= MIN_NOTIFICATION_INTERVAL_MS
+            if (force || (countChanged && cooledDown)) {
                 startForegroundCompat(buildNotification(count))
                 lastNotifiedPeerCount = count
+                lastNotificationAtMs = now
             }
         } else if (force) {
             // If disabled and forced, make sure to remove any prior foreground state
