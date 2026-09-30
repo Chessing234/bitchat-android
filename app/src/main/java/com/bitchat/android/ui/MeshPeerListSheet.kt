@@ -103,7 +103,7 @@ fun MeshPeerListSheet(
     val conversations by viewModel.conversations.collectAsStateWithLifecycle()
     val conversationStoreState by viewModel.conversationStoreState.collectAsStateWithLifecycle()
     val peerDirect by viewModel.peerDirect.collectAsStateWithLifecycle()
-    val geohashPeopleCount = geohashPeople.size
+    val geohashPeopleCount = geohashPeople.count { !isUnannouncedNickname(it.displayName) }
     val wifiAwareConnected by com.bitchat.android.wifiaware.WifiAwareController.connectedPeers.collectAsStateWithLifecycle()
     val wifiAwarePeerIDs = remember(wifiAwareConnected) { wifiAwareConnected.keys.toSet() }
     val directPeerIdentityIDs = remember(peerDirect) {

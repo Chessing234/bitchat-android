@@ -579,8 +579,8 @@ fun PeerCounter(
     // Compute channel-aware people count and color (matches iOS logic exactly)
     val (peopleCount, countColor) = when (selectedLocationChannel) {
         is com.bitchat.android.geohash.ChannelID.Location -> {
-            // Geohash channel: show geohash participants
-            val count = geohashPeople.size
+            // Geohash channel: match the people sheet (exclude bare "anon")
+            val count = geohashPeople.count { !isUnannouncedNickname(it.displayName) }
             Pair(count, if (count > 0) colorScheme.primary else palette.textTertiary)
         }
         is com.bitchat.android.geohash.ChannelID.Mesh,
